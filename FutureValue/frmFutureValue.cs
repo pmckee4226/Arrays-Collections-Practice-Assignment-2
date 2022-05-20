@@ -13,6 +13,9 @@ using System.Windows.Forms;
  * May 19, 2022                     *
  * Ex 8-2: Use a rectangular array  */
 
+
+// Patrick McKee - CIS123 - Ex8.2 
+// Step 
 namespace FutureValue
 {
     public partial class frmFutureValue : Form
@@ -23,6 +26,12 @@ namespace FutureValue
         }
 
         // TODO: Declare the rectangular array and the row index here
+        // Patrick McKee - CIS123 - Ex8.2 
+        // Step 2 - Declare class variables for a row counter and a 
+        // rectangular array of strings that provides for 10 rows & 4 columns
+
+        string[,] calculationsTable = new string[10, 4];
+        int row = 0;
 
         private void btnCalculate_Click(object sender, EventArgs e)
         {
@@ -30,21 +39,34 @@ namespace FutureValue
             {
                 if (IsValidData())
                 {
+
+                    // Patrick McKee - CIS123 - Ex8.2 
+                    // Step 3 - Add code that stores the values for each calculation
+                    //in the next row of the array.
+
+                    //INPUT
                     decimal monthlyInvestment =
                         Convert.ToDecimal(txtMonthlyInvestment.Text);
                     decimal yearlyInterestRate =
                         Convert.ToDecimal(txtInterestRate.Text);
                     int years = Convert.ToInt32(txtYears.Text);
 
+                    //PROCESSING
                     int months = years * 12;
                     decimal interestRateMonthly = yearlyInterestRate / 12 / 100;
 
                     decimal futureValue = CalculateFutureValue(
                         monthlyInvestment, interestRateMonthly, months);
+                    calculationsTable[row, 0] = monthlyInvestment.ToString("c");
+                    calculationsTable[row, 1] = yearlyInterestRate.ToString("p1");
+                    calculationsTable[row, 2] = years.ToString();
+                    calculationsTable[row, 3] = futureValue.ToString("c");
+                    row++;
+
+                    //OUTPUT
                     txtFutureValue.Text = futureValue.ToString("c");
                     txtMonthlyInvestment.Focus();
 
-                    // TODO: Add the calculation to the rectangular array here
                 }
             }
             catch (Exception ex)
@@ -137,10 +159,22 @@ namespace FutureValue
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            // TODO: Display the rectangular array in a dialog box here
+            // Patrick McKee - CIS123 - Ex8.2 
+            // Step 5 - Test the program by making up to 10 future value calculations
+
+            string message = "Inv/Mo.\tRate\tYears\tFuture Value\n";
+            for (int i = 0; i < calculationsTable.GetLength(0); i++)
+            {
+                for (int j = 0; j < calculationsTable.GetLength(1); j++)
+                {
+                    message += calculationsTable[i, j] + "\t";
+                }
+                message += "\n";
+            }
+            MessageBox.Show(message, "Future Value Calculations");
 
             this.Close();
         }
-
+ 
     }
 }
